@@ -1,0 +1,6 @@
+{
+	"name": "alextrb/SgvizlerPackage",
+    "require": {
+        "alextrb/SgvizlerPackage": "1.0.0"
+    }
+}
