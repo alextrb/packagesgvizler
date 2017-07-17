@@ -17,20 +17,12 @@
                  * @param {String} url The url to linkify.
                  * @param {boolean} arraySyntax Flag if results should
                  * be rendered in array syntax (true), or as an HTML
-                 * string (false).
-                 * @param {String} width The width of the image
-                 * @param {String} height The height of the image
+                 * string (false), or in another syntax (undefined)
+                 * @param {String} style of the image
+                 * @param {String} dataType The datatype that the link refers to
                  * @return {String}
                  */
                 linkify = function (url, arraySyntax, style, dataType) {
-                    if (typeof(style) == 'undefined'){
-                        style = '';
-                    }
-                    
-                    if (typeof(dataType) == 'undefined'){
-                        dataType = null;
-                    }
-
                     var prefixed = namespace.prefixify(url),
                         base = namespace.getBaseURL(),
                         href = url, // the hyperlink.
@@ -63,12 +55,10 @@
                         result = url;
                     } 
                     // Check if the link refers to a picture
-                    if (/(jpeg|jpg|gif|png|JPG|PNG|JPEG|svg)$/.test(url)){
-                        //Return a result in straight html
-                        if (( arraySyntax == false) || ( dataType == 'img' )) {
+                    if ((/(jpeg|jpg|gif|png|JPG|PNG|JPEG|svg)$/.test(url)) && (arraySyntax == undefined)){
+                        //Returns a result in straight html
                              result = '<img src=' + url + ' alt= "text" style= "' + style +'"> ';
                              
-                        }
                     }
                     return result;
                 },
@@ -76,24 +66,36 @@
 
             return {
                 /**
-                 * Converts a url into a `<a href=""> or a <img src="">` element with the
+                 * Converts a url into a `<a href="">` element with the
                  * link prefixified.
                  * @method linkify2String
                  * @protected
                  * @param {String} url The url to linkify.
-                 * @param {String} style The rank of the style
+                 * @return {String}
+                 */
+                linkify2String: function (url) {  
+                    return linkify(url, false, '', null);
+                    
+                },
+
+                /**
+                 * Converts a url into a `<img src="">` element with the
+                 * link prefixified.
+                 * @method linkify2String
+                 * @protected
+                 * @param {String} url The url to linkify.
+                 * @param {String} style of the image
                  * @param {String} dataType The dataType that the link refers to
                  * @return {String}
                  */
-                linkify2String: function (url, style, dataType) {  
+                imagify2String: function (url, style, dataType) {  
                     if (typeof(style) == 'undefined'){
                         style = '';
                     }
                     if (typeof(dataType) == 'undefined'){
                         dataType = null;
-                    }
-                    
-                    return linkify(url, false, style, dataType);
+                    }                 
+                    return linkify(url, undefined, style, dataType);
                     
                 },
                 /**
@@ -105,7 +107,7 @@
                  * @return {Array}
                  */
                 linkify2HTMLElementArray: function (url) {
-                    return linkify(url, true);
+                    return linkify(url, true, '', null);
                 },
 
                 /**
@@ -122,7 +124,7 @@
                 },
 
                 /**
-                * Loads the Bootstrap necessary for TableExtended
+                * Loads the Bootstrap necessary for TableExtension
                 * @method loadBOOTSTRAP
                 * @protected
                 * @injects
